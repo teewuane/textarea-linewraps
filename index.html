@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<link href='https://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
+<div>
+
+<textarea style="display: inline-block;
+			width: 400px;
+			height: 400px;
+			background: #fafafa;
+			border: none;
+			margin: 0;
+			padding: 0;
+			font-family: 'Reenie Beanie';
+			font-size: 31px;" wrap="hard">a b c d e f g h i j k l m n o p q r s</textarea>
+</div>
+
+	<div>
+		<button type="button" id="update">Update</button>
+	</div>
+
+	<hr>
+
+	<script src="textarea-linewraps.js"></script>
+	<script type="text/javascript">
+		window.onload = function() {
+			console.log(calculateWraps());
+			var btn = document.getElementById('update');
+			btn.onclick = function() {
+				console.log(calculateWraps());
+			}
+		}
+	</script>
+</body>
+</html>
