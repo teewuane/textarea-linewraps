@@ -23,7 +23,6 @@ function calculateWraps(t) {
 	}
 
 	function placeOffScreen(element) {
-		return;
 		element.style.position = "fixed";
 		element.style.left = "-100000px";
 	}
