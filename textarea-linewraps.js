@@ -23,6 +23,7 @@ function calculateWraps(t) {
 	}
 
 	function placeOffScreen(element) {
+		return; // keep on screen for now.
 		element.style.position = "fixed";
 		element.style.left = "-100000px";
 	}
@@ -146,7 +147,7 @@ function calculateWraps(t) {
 		wrapsApplied += 1;
 		insertBreakAt += wrapsApplied; // 13 + 1 + 1 = 15
 		newString = newString.slice(0, insertBreakAt) + "\n" + newString.slice(insertBreakAt);
-		
+
 		return wordWidth;
 	}
 
