@@ -1,8 +1,3 @@
-// get the fontfamily and fontsize of it
-var getCSS = function(element, property) {
-	return window.getComputedStyle( element, null).getPropertyValue( property );
-}
-
 function calculateWraps(t) {
 	// this will take a textarea and calculate where "/n" should be inserted.
 	// var t = document.getElementsByTagName('textarea')[0];
@@ -13,8 +8,6 @@ function calculateWraps(t) {
 
 	var fontFamily = window.getComputedStyle( t, null).getPropertyValue('font-family');
 	var fontSize = window.getComputedStyle( t, null).getPropertyValue('font-size');
-	// var fontFamily = getCSS(t, 'font-family');
-	// var fontSize = getCSS(t, 'font-size');
 
 	function setInlineNoPadMargin(element) {
 		element.style.display = "inline-block";
@@ -74,6 +67,8 @@ function calculateWraps(t) {
 
 	var newString = "";
 
+	var lineBreakOpps = [];
+
 	function clearResults() {
 		while (results.hasChildNodes()) {
 			results.removeChild(results.lastChild);
@@ -97,6 +92,7 @@ function calculateWraps(t) {
 	}
 
 	function insertSpaceChar(i) {
+	lineBreakOpps.push(i);
 		var space = document.createElement("span");
 		setFontAndSize(space);
 		setInlineNoPadMargin(space);
@@ -121,29 +117,21 @@ function calculateWraps(t) {
 		return char.offsetWidth;
 	}
 
-	function insertLineBreakAtLastSpace(currentIndex) {
+	function insertLineBreakAtLastOpp(currentIndex) {
 
-		var insertBreakAt = currentIndex;
 		var wordWidth = 0;
-		var htmlEl = null;
-		var idName = "";
+		var lastOpp = lineBreakOpps.slice(-1).pop();
+		var insertBreakAt = lastOpp;
 
-		for (var i = currentIndex; i >= 0; i=i) {
-			i--;
-			idName = "char-index-"+(i);
-			htmlEl = document.getElementById(idName);
-			wordWidth += parseInt(htmlEl.getAttribute('data-char-width'));
-			if (chars[i] == " ") {
-				insertBreakAt = i;
-				break;
-			}
+		var htmlEl = document.getElementById("char-index-" + lastOpp);
+
+		for (var i = lastOpp; i <= currentIndex; i++) {
+			wordWidth += parseInt(document.getElementById("char-index-"+i).getAttribute('data-char-width'));
 		}
 
 		var breakAt;
 		var newline = document.createElement("div");
-		// htmlEl is "char-index-13" (the space betwenn "g" and "h")
 		htmlEl.parentNode.insertBefore(newline, htmlEl.nextSibling);
-		// insertBreakAt = insertBreakAt + wrapsApplied; // 13 + 1 + 1 = 14
 		wrapsApplied += 1;
 		insertBreakAt += wrapsApplied; // 13 + 1 + 1 = 15
 		newString = newString.slice(0, insertBreakAt) + "\n" + newString.slice(insertBreakAt);
@@ -169,13 +157,31 @@ function calculateWraps(t) {
 
 		runningWidth += charWidth;
 
-		if (runningWidth >= t.offsetWidth+charWidth) {
+		console.log(wrapsApplied);
+		if (runningWidth >= t.offsetWidth-wrapsApplied-3) {
 			var lastWordWidth = 0;
 
-			lastWordWidth = insertLineBreakAtLastSpace(i);
+			lastWordWidth = insertLineBreakAtLastOpp(i);
 
 			runningWidth = lastWordWidth; // reset running width
 		}
 	}
+
 	return newString;
+}
+
+function incTest() {
+	var t = document.getElementsByTagName('textarea')[0];
+
+	t.style.width = t.offsetWidth + 1 + "px";
+	console.log("new width is: " + t.offsetWidth);
+	calculateWraps();
+}
+
+function decTest() {
+	var t = document.getElementsByTagName('textarea')[0];
+
+	t.style.width = t.offsetWidth - 1 + "px";
+	console.log("new width is: " + t.offsetWidth);
+	calculateWraps();
 }
