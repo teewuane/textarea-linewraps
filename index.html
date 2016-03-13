@@ -15,7 +15,7 @@
 			border: none;
 			margin: 0;
 			padding: 0;
-			line-break: loose;
+			line-break: strict;
 			font-family: 'Reenie Beanie';
 			font-size: 31px;" wrap="hard">Lorem,
 ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.
@@ -31,13 +31,14 @@ ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.
 	<script src="./linebreak-algorithm.js" type="text/javascript"></script>
 
 	<script type="text/javascript">
+		var t = document.getElementsByTagName('textarea')[0];
 		window.onload = function() {
-			getTextareaWidth();
+			applyLineBreaks(t);
 
 			var btn = document.getElementById('update');
 
 			btn.onclick = function() {
-				getTextareaWidth();
+				applyLineBreaks(t);
 			}
 		}
 	</script>
