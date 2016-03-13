@@ -4,6 +4,16 @@ function applyLineBreaks(textarea) {
 	// {line-break: strict;}
 	// Also requires the attribte "wrap" to be "hard".
 
+	function getPaddingAndBorder() {
+		var borderLeft = parseInt(window.getComputedStyle( textarea, null).getPropertyValue('border-left-width'));
+		var paddingLeft = parseInt(window.getComputedStyle( textarea, null).getPropertyValue('padding-left'));
+		var borderRight = parseInt(window.getComputedStyle( textarea, null).getPropertyValue('border-right-width'));
+		var paddingRight = parseInt(window.getComputedStyle( textarea, null).getPropertyValue('padding-right'));
+
+		return borderLeft + paddingLeft + borderRight + paddingRight;
+	}
+
+
 	function getTextWidthCanvas(text, font) {
 		var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
 		document.body.appendChild(canvas);
@@ -35,6 +45,7 @@ function applyLineBreaks(textarea) {
 	outer.push([]);
 	var lineCount = 0;
 	var spaceLeft = maxLineWidth;
+	var paddingAndBorder = getPaddingAndBorder();
 
 	for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 
@@ -47,7 +58,7 @@ function applyLineBreaks(textarea) {
 			var width = getTextWidth(word);
 			spaceLeft -= (width + spaceCharWidth);
 
-			if (spaceLeft > 0) {  // close to zero
+			if (spaceLeft > (0 + paddingAndBorder)) {  // close to zero
 				outer[lineCount].push(word);
 			} else {
 				// linebreak here.
@@ -69,7 +80,6 @@ function applyLineBreaks(textarea) {
 		newString += outer[i].join(' ');
 		newString += "\n";
 	}
-	console.log(newString);
 
 	return newString;
 }
