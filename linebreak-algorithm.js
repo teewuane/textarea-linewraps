@@ -17,6 +17,7 @@ function applyLineBreaks(textarea) {
 	function getTextWidthCanvas(text, font) {
 		var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
 		document.body.appendChild(canvas);
+
 		var context = canvas.getContext("2d");
 		context.font = font;
 		var metrics = context.measureText(text);
@@ -75,11 +76,25 @@ function applyLineBreaks(textarea) {
 		outer.push([]);
 	}
 
+	var lastArray = outer[outer.length - 1];
+
+	if (lastArray.length === 0) {
+		// DROP THE LAST ARRAY!
+		outer.pop();
+	}
+
 	var newString = "";
+
 	for (var i = 0; i < outer.length; i++) {
 		newString += outer[i].join(' ');
-		newString += "\n";
+		if (i !== (outer.length - 1)) {
+			// only add the new line if it is not the last line.
+			newString += "\n";
+		}
 	}
+
+	// remove the canvas so it doesn't interfere.
+	document.body.removeChild(getTextWidth.canvas);
 
 	return newString;
 }
